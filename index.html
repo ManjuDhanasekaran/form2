@@ -18,11 +18,17 @@ function validateForm() {
     var mobile = document.contactForm.mobile.value;
     var country = document.contactForm.country.value;
     var gender = document.contactForm.gender.value;
-    var password = document.contactForm.password.value;
-    var confirm-password = document.contactForm.confirm-password.value;
+    var hobbies = [];
+    var checkboxes = document.getElementsByName("hobbies[]");
+    for(var i=0; i < checkboxes.length; i++) {
+        if(checkboxes[i].checked) {
+            // Populate hobbies array with selected values
+            hobbies.push(checkboxes[i].value);
+        }
+    }
     
 	// Defining error variables with a default value
-    var nameErr = emailErr = mobileErr = countryErr = genderErr = passwordErr = true;
+    var nameErr = emailErr = mobileErr = countryErr = genderErr = true;
     
     // Validate name
     if(name == "") {
@@ -64,7 +70,13 @@ function validateForm() {
         }
     }
     
-    
+    // Validate country
+    if(country == "Select") {
+        printError("countryErr", "Please select your country");
+    } else {
+        printError("countryErr", "");
+        countryErr = false;
+    }
     
     // Validate gender
     if(gender == "") {
@@ -73,21 +85,9 @@ function validateForm() {
         printError("genderErr", "");
         genderErr = false;
     }
- // Validate password
-    if(password == "") {
-        printError("passwordErr", "Please enter password");
-    } else {
-        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-        if(regex.test(mobile) === false) {
-            printError("passwordErr", "Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)");
-        } else{
-            printError("passwordErr", "");
-            passwordErr = false;
-        }
-    }
     
     // Prevent the form from being submitted if there are any errors
-    if((nameErr || emailErr || mobileErr || countryErr || genderErr || password) == true) {
+    if((nameErr || emailErr || mobileErr || countryErr || genderErr) == true) {
        return false;
     } else {
         // Creating a string from input data for preview
@@ -96,8 +96,7 @@ function validateForm() {
                           "Email Address: " + email + "\n" +
                           "Mobile Number: " + mobile + "\n" +
                           "Country: " + country + "\n" +
-                          "Gender: " + gender + "\n"
-                          "password: " + password + "\n";
+                          "Gender: " + gender + "\n";
         if(hobbies.length) {
             dataPreview += "Hobbies: " + hobbies.join(", ");
         }
@@ -144,19 +143,6 @@ function validateForm() {
         </div>
         <div class="error" id="genderErr"></div>
     </div>
-
-            <div class="row">
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password">
-                <small></small>
-            </div>
-
-
-            <div class="row">
-                <label for="confirm-password">Confirm Password:</label>
-                <input type="password" name="confirm-password" id="confirm-password">
-                <small></small>
-            </div>
     
     <div class="row">
         <input type="submit" value="Submit">
